@@ -105,3 +105,19 @@
     'GRAD' 0,
     'opsz' 24;
 }
+
+/* ---- Cold-launch splash ---- */
+
+/*
+ * Duration must match FADE_MS in src/features/splash/SplashGate.tsx, which
+ * unmounts the overlay after the fade-out completes.
+ */
+.splash-overlay {
+  transition: opacity 320ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-overlay {
+    transition: none;
+  }
+}

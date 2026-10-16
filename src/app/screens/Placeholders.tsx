@@ -11,7 +11,12 @@ function Placeholder({ title, hint }: { title: string; hint: string }) {
 }
 
 export function HomeScreen() {
-  return <Placeholder title="Home" hint="Featured content, continue watching and shelves arrive in Phase 4." />
+  return (
+    <Placeholder
+      title="Home"
+      hint="Featured content, continue watching and shelves arrive in Phase 4."
+    />
+  )
 }
 
 export function SeriesScreen() {
@@ -19,11 +24,25 @@ export function SeriesScreen() {
 }
 
 export function GenresScreen() {
-  return <Placeholder title="Genres" hint="Movie and series genre browsing arrives in Phase 8." />
+  return (
+    <Placeholder
+      title="Genres"
+      hint="Movie and series genre browsing arrives in Phase 8."
+    />
+  )
 }
 
 export function SearchScreen() {
   return <Placeholder title="Search" hint="Unified search arrives in Phase 8." />
+}
+
+export function AccessScreen() {
+  return (
+    <Placeholder
+      title="Enter access code"
+      hint="The access-code screen arrives in Phase 3. Until then this is as far as the app goes without a valid session."
+    />
+  )
 }
 
 export function NotFoundScreen() {

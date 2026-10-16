@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AppConfigProvider } from '@/features/config/AppConfigProvider'
 import { ConnectingGate } from '@/features/connection/ConnectingGate'
 import { DeviceCheckRunner } from '@/features/auth/DeviceCheckRunner'
+import { SplashGate } from '@/features/splash/SplashGate'
 import { BootGate, useBootReady } from '@/features/capabilities/presentation-hooks'
 import { AppRouter } from './router'
 
@@ -18,9 +19,13 @@ const queryClient = new QueryClient({
 function BootAwareShell() {
   const ready = useBootReady()
   return (
-    <ConnectingGate pending={!ready}>
-      <AppRouter />
-    </ConnectingGate>
+    <>
+      {/* Overlays the gate on cold launch; unmounts itself after the fade. */}
+      <SplashGate bootReady={ready} />
+      <ConnectingGate pending={!ready}>
+        <AppRouter />
+      </ConnectingGate>
+    </>
   )
 }
 
