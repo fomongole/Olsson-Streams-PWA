@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { loadSession, onUnauthorized } from '@/shared/api/session'
+import { AccessScreen } from '@/features/auth/AccessScreen'
+import { loadSession, onSessionChanged, onUnauthorized } from '@/shared/api/session'
 import { AppShell } from './app-shell/AppShell'
 import {
-  AccessScreen,
   GenresScreen,
   HomeScreen,
   NotFoundScreen,
@@ -11,20 +11,31 @@ import {
   SeriesScreen,
 } from './screens/Placeholders'
 
+const REVOKED_NOTICE =
+  'Your access has expired or been revoked. Please enter a valid code.'
+
 export function AppRouter() {
-  // Re-render when the client clears the session (device check revoke, or a
-  // 401 carrying CODE_REVOKED / DEVICE_MISMATCH / AUTH_INVALID) so the guard
-  // below reacts instead of waiting for the next reload.
+  // Re-render when the session changes so the guard below reacts instead of
+  // waiting for the next reload: verification only writes the session locally
+  // (no other event fires), while a device-check revoke clears it first and
+  // then raises the unauthorized event that carries the notice text.
   const [, setTick] = useState(0)
+  const [notice, setNotice] = useState<string | null>(null)
+
   useEffect(() => {
-    const unsubscribe = onUnauthorized(() => setTick((n) => n + 1))
+    const refresh = () => setTick((n) => n + 1)
+    const unsubscribeSession = onSessionChanged(refresh)
+    const unsubscribeUnauthorized = onUnauthorized(() => {
+      setNotice(REVOKED_NOTICE)
+      refresh()
+    })
     return () => {
-      unsubscribe()
+      unsubscribeSession()
+      unsubscribeUnauthorized()
     }
   }, [])
 
-  // Phase 3 replaces this with the real access-code flow.
-  if (loadSession() === null) return <AccessScreen />
+  if (loadSession() === null) return <AccessScreen notice={notice} />
 
   return (
     <BrowserRouter>
@@ -34,7 +45,7 @@ export function AppRouter() {
           <Route path="series" element={<SeriesScreen />} />
           <Route path="genres" element={<GenresScreen />} />
           <Route path="search" element={<SearchScreen />} />
-          {/* Access (auth) and detail/player routes arrive with Phases 3–6. */}
+          {/* Detail/player routes arrive with Phases 5–6. */}
           <Route path="access" element={<Navigate to="/" replace />} />
           <Route path="*" element={<NotFoundScreen />} />
         </Route>

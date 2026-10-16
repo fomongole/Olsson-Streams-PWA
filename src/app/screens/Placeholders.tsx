@@ -36,15 +36,6 @@ export function SearchScreen() {
   return <Placeholder title="Search" hint="Unified search arrives in Phase 8." />
 }
 
-export function AccessScreen() {
-  return (
-    <Placeholder
-      title="Enter access code"
-      hint="The access-code screen arrives in Phase 3. Until then this is as far as the app goes without a valid session."
-    />
-  )
-}
-
 export function NotFoundScreen() {
   return <Placeholder title="Page not found" hint="That route doesn’t exist." />
 }

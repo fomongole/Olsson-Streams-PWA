@@ -78,32 +78,39 @@
 
 /* ---- Material Symbols Rounded utility ---- */
 
-.msym {
-  font-family: 'Material Symbols Rounded';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
-  user-select: none;
-}
+/*
+ * Declared in @layer components so utility overrides (font-size, colour)
+ * still win. Left unlayered, .msym's own font-size would beat every
+ * `text-[Npx]` utility — cascade layers rank below unlayered rules.
+ */
+@layer components {
+  .msym {
+    font-family: 'Material Symbols Rounded';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24;
+    user-select: none;
+  }
 
-.msym-filled {
-  font-variation-settings:
-    'FILL' 1,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
+  .msym-filled {
+    font-variation-settings:
+      'FILL' 1,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24;
+  }
 }
 
 /* ---- Cold-launch splash ---- */
@@ -119,5 +126,66 @@
 @media (prefers-reduced-motion: reduce) {
   .splash-overlay {
     transition: none;
+  }
+}
+
+/* ---- Access screen ---- */
+
+/*
+ * Mirrors the shake in AccessVerificationScreen.kt (350ms, -12/+12/-8/+8/-4/+4)
+ * and its bouncy per-character scale-in. Applied via a keyed wrapper so each
+ * new error restarts the animation from the beginning.
+ */
+.access-shake {
+  animation: access-shake 350ms linear;
+}
+
+.access-char-pop {
+  animation: access-char-pop 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes access-shake {
+  0% {
+    transform: translateX(0);
+  }
+  14.3% {
+    transform: translateX(-12px);
+  }
+  28.6% {
+    transform: translateX(12px);
+  }
+  42.9% {
+    transform: translateX(-8px);
+  }
+  57.1% {
+    transform: translateX(8px);
+  }
+  71.4% {
+    transform: translateX(-4px);
+  }
+  85.7% {
+    transform: translateX(4px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes access-char-pop {
+  0% {
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .access-shake,
+  .access-char-pop {
+    animation: none;
   }
 }

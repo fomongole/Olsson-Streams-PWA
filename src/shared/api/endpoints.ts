@@ -1,9 +1,9 @@
 /**
- * Endpoints needed for the foundation phase: the public app config and
+ * Boot + auth endpoints: the public app config, the access-code verify and
  * the auth device check. More endpoints arrive with their phases.
  */
 
-import { apiGet, apiPost, apiRequest } from './client'
+import { apiGet, apiRequest } from './client'
 import type { ClientSession } from './session'
 import { saveSession } from './session'
 
@@ -65,7 +65,10 @@ export type DeviceCheckResult =
  * save the refreshed session when authorized, clear locally when not,
  * and fail-open on any network error.
  */
-export async function checkDevice(deviceId: string, code: string): Promise<DeviceCheckResult> {
+export async function checkDevice(
+  deviceId: string,
+  code: string,
+): Promise<DeviceCheckResult> {
   try {
     const { data } = await apiRequest<DeviceCheckData | null>('auth/device/check', {
       method: 'POST',
@@ -91,7 +94,7 @@ export async function checkDevice(deviceId: string, code: string): Promise<Devic
   }
 }
 
-/* ---- POST /auth/access-code/verify (used by Phase 3, typed here) ---- */
+/* ---- POST /auth/access-code/verify ---- */
 
 export interface VerifyResponse {
   token?: string
@@ -99,11 +102,25 @@ export interface VerifyResponse {
   expires_in?: number
   code?: string
   assigned_to?: string
+  status?: string
   can_download?: boolean
   download_status?: string | null
   download_expires_at?: string | null
+  device_id?: string
+  redeemed_at?: string | null
 }
 
+/**
+ * `public` on purpose: the caller has no token yet, and a stale one left over
+ * from a previous session must not ride along on the verify request.
+ * Returns the envelope too — `message` carries the copy the Android app toasts
+ * ("Access granted."). `data` is nullable because the Android repository also
+ * treats a 200 without a session body as a failure.
+ */
 export function verifyAccessCodeRequest(code: string, deviceId: string) {
-  return apiPost<VerifyResponse>('auth/access-code/verify', { code, device_id: deviceId })
+  return apiRequest<VerifyResponse | null>('auth/access-code/verify', {
+    method: 'POST',
+    body: { code, device_id: deviceId },
+    public: true,
+  })
 }

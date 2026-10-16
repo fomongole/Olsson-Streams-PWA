@@ -37,9 +37,12 @@ export function saveSession(session: ClientSession): void {
   } catch {
     // Ignore: the user simply re-verifies next launch.
   }
+  notifySessionChanged()
 }
 
-export function loadSession(nowEpochSeconds = Math.floor(Date.now() / 1000)): ClientSession | null {
+export function loadSession(
+  nowEpochSeconds = Math.floor(Date.now() / 1000),
+): ClientSession | null {
   try {
     const raw = localStorage.getItem(SESSION_KEY)
     if (!raw) return null
@@ -70,6 +73,27 @@ export function clearSession(): void {
   } catch {
     // Ignore.
   }
+  notifySessionChanged()
+}
+
+/* ---- Session-change bus (drives the router's access guard) ---- */
+
+type SessionListener = () => void
+const sessionListeners = new Set<SessionListener>()
+
+export function onSessionChanged(listener: SessionListener): () => void {
+  sessionListeners.add(listener)
+  return () => sessionListeners.delete(listener)
+}
+
+/**
+ * Fired on every save/clear, so the router guard re-evaluates
+ * `loadSession()` instead of waiting for a reload. Verification only writes
+ * the session locally — unlike a revoke there is no unauthorized event to
+ * piggyback on.
+ */
+export function notifySessionChanged(): void {
+  for (const listener of sessionListeners) listener()
 }
 
 /* ---- Unauthorized event bus (mirrors AuthSessionEvents) ---- */

@@ -38,6 +38,7 @@ export type IconName =
   | 'mail'
   | 'call'
   | 'support_agent'
+  | 'chat'
   | 'language'
   | 'dark_mode'
   | 'info'

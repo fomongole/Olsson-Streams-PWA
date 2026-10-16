@@ -31,7 +31,11 @@ export function ConnectingGate({
         role="status"
         aria-live="polite"
       >
-        <img src="/icons/icon-192.png" alt="" className="size-16 animate-pulse rounded-2xl" />
+        <img
+          src="/icons/icon-192.png"
+          alt=""
+          className="size-16 animate-pulse rounded-2xl"
+        />
         <p className="text-base font-semibold text-text">Connecting to Olsson Streams…</p>
         <p className="text-center text-sm text-text-muted">
           The server may be waking up. This can take a moment on first launch.

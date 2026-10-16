@@ -65,9 +65,14 @@ function retryAfterSecondsFrom(response: Response, body: unknown): number | null
     const asNumber = Number(header)
     if (Number.isFinite(asNumber)) return asNumber
     const asDate = Date.parse(header)
-    if (Number.isFinite(asDate)) return Math.max(0, Math.round((asDate - Date.now()) / 1000))
+    if (Number.isFinite(asDate))
+      return Math.max(0, Math.round((asDate - Date.now()) / 1000))
   }
   if (body && typeof body === 'object') {
+    // Content endpoints report minutes_left; the access-code verify
+    // endpoint reports retry_after directly.
+    const retryAfter = (body as Record<string, unknown>).retry_after
+    if (typeof retryAfter === 'number') return retryAfter
     const minutesLeft = (body as Record<string, unknown>).minutes_left
     if (typeof minutesLeft === 'number') return minutesLeft * 60
   }
@@ -82,12 +87,17 @@ async function parseError(response: Response): Promise<ApiError> {
     // Non-JSON error body.
   }
   const envelope = (body ?? {}) as Partial<ApiEnvelope<unknown>>
+  const serverMessage =
+    typeof envelope.message === 'string' && envelope.message.trim().length > 0
+      ? envelope.message
+      : null
   return new ApiError({
     status: response.status,
     code: envelope.error_code ?? null,
-    message: envelope.message ?? `Request failed with status ${String(response.status)}.`,
+    message: serverMessage ?? `Request failed with status ${String(response.status)}.`,
     requestId: envelope.request_id ?? response.headers.get('X-Request-ID'),
     retryAfterSeconds: retryAfterSecondsFrom(response, body),
+    hasServerMessage: serverMessage !== null,
   })
 }
 
@@ -148,7 +158,8 @@ async function refreshSession(): Promise<boolean> {
       if (!envelope.success || !refreshed?.token || !session) return false
       saveSession({
         token: refreshed.token,
-        expiresAtEpochSeconds: Math.floor(Date.now() / 1000) + (refreshed.expires_in ?? 0),
+        expiresAtEpochSeconds:
+          Math.floor(Date.now() / 1000) + (refreshed.expires_in ?? 0),
         code: refreshed.code ?? session.code,
         assignedTo: refreshed.assigned_to ?? session.assignedTo,
         canDownload: refreshed.can_download ?? session.canDownload,
@@ -203,7 +214,9 @@ export async function apiRequest<T>(
       // TypeError on DNS/network failure. Mirrors ApiHostFailoverInterceptor.
       const isNetworkFailure =
         failure instanceof TypeError ||
-        (failure instanceof DOMException && failure.name === 'AbortError' && !options.signal?.aborted)
+        (failure instanceof DOMException &&
+          failure.name === 'AbortError' &&
+          !options.signal?.aborted)
       if (!isNetworkFailure || !navigator.onLine) throw failure
       const alternate = alternateBase(base)
       if (!alternate) throw failure

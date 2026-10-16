@@ -4,6 +4,7 @@ import { ConnectingGate } from '@/features/connection/ConnectingGate'
 import { DeviceCheckRunner } from '@/features/auth/DeviceCheckRunner'
 import { SplashGate } from '@/features/splash/SplashGate'
 import { BootGate, useBootReady } from '@/features/capabilities/presentation-hooks'
+import { ToastHost } from '@/components/ui/ToastHost'
 import { AppRouter } from './router'
 
 const queryClient = new QueryClient({
@@ -37,6 +38,9 @@ export function App() {
         <BootGate>
           <BootAwareShell />
         </BootGate>
+        {/* Outlives route changes so a success toast survives the flip from
+            the access screen into the shell. */}
+        <ToastHost />
       </AppConfigProvider>
     </QueryClientProvider>
   )

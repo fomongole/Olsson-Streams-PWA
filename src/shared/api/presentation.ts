@@ -46,24 +46,33 @@ export function parsePresentation(json: string): ClientPresentation {
 
   return {
     supportsCasting: bool('supports_casting', DEFAULT_PRESENTATION.supportsCasting),
-    supportsMovieGenres: bool('supports_movie_genres', DEFAULT_PRESENTATION.supportsMovieGenres),
-    supportsSeriesGenres: bool('supports_series_genres', DEFAULT_PRESENTATION.supportsSeriesGenres),
+    supportsMovieGenres: bool(
+      'supports_movie_genres',
+      DEFAULT_PRESENTATION.supportsMovieGenres,
+    ),
+    supportsSeriesGenres: bool(
+      'supports_series_genres',
+      DEFAULT_PRESENTATION.supportsSeriesGenres,
+    ),
     supportsSeriesCountries: bool(
       'supports_series_countries',
       DEFAULT_PRESENTATION.supportsSeriesCountries,
     ),
-    seriesDisplayMode: str('series_display_mode', DEFAULT_PRESENTATION.seriesDisplayMode) as
-      | 'rails'
-      | 'grid',
+    seriesDisplayMode: str(
+      'series_display_mode',
+      DEFAULT_PRESENTATION.seriesDisplayMode,
+    ) as 'rails' | 'grid',
     supportsVjs: bool('supports_vjs', DEFAULT_PRESENTATION.supportsVjs),
     heroImageMode: str('hero_image_mode', DEFAULT_PRESENTATION.heroImageMode),
     movieOpenMode: str('movie_open_mode', DEFAULT_PRESENTATION.movieOpenMode) as
-      | 'details'
-      | 'quick_sheet',
+      'details' | 'quick_sheet',
     seriesOpenMode: str('series_open_mode', DEFAULT_PRESENTATION.seriesOpenMode),
     episodeOpenMode: str('episode_open_mode', DEFAULT_PRESENTATION.episodeOpenMode),
     searchResultMode: str('search_result_mode', DEFAULT_PRESENTATION.searchResultMode),
-    categoryResultMode: str('category_result_mode', DEFAULT_PRESENTATION.categoryResultMode),
+    categoryResultMode: str(
+      'category_result_mode',
+      DEFAULT_PRESENTATION.categoryResultMode,
+    ),
   }
 }
 

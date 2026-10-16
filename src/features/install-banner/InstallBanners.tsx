@@ -78,7 +78,7 @@ export function InstallBanners() {
   return (
     <div className="sticky top-0 z-40 border-b border-border bg-surface px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-top))]">
       <div className="mx-auto flex max-w-3xl items-start gap-3">
-          <Icon name="android" className="mt-0.5 text-accent" />
+        <Icon name="android" className="mt-0.5 text-accent" />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-text">Get the app</p>
           <p className="mt-0.5 text-xs text-text-muted">

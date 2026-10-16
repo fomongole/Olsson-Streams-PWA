@@ -18,7 +18,7 @@ npm run format     # Prettier
 
 All UI icons come from a **subsetted** copy of
 [Material Symbols Rounded](https://fonts.google.com/icons?icon.family=Material+Symbols+Rounded),
-shipped in `public/fonts/material-symbols-rounded.woff2` (~41 KB). The full font
+shipped in `public/fonts/material-symbols-rounded.woff2` (~42 KB). The full font
 is ~5.4 MB, which is far too heavy to ship to phones on mobile data, so we cut
 it down to only the glyphs this app uses.
 
@@ -47,24 +47,22 @@ compile error.
 
 ### Icons currently in the subset
 
-| Name | | Name | | Name | |
-| --- | --- | --- | --- | --- | --- |
-| `bookmark_add` | | `language` | | `settings` | |
-| `call` | | `live_tv` | | `share` | |
-| `category` | | `lock` | | `signal_cellular_alt` | |
-| `check` | | `mail` | | `star` | |
-| `chevron_left` | | `more_vert` | | `support_agent` | |
-| `chevron_right` | | `movie` | | `tv` | |
-| `close` | | `open_in_new` | | `volume_up` | |
-| `dark_mode` | | `pause` | | `wifi` | |
-| `delete` | | `person` | | `wifi_off` | |
-| `download` | | `play_arrow` | | | |
-| `error` | | `refresh` | | | |
-| `expand_more` | | `schedule` | | | |
-| `flag` | | `search` | | | |
-| `fullscreen` | | `android` | | | |
-| `grid_view` | | `home` | | | |
-| `info` | | `ios_share` | | | |
+| Name            |     | Name          |     | Name                  |     |
+| --------------- | --- | ------------- | --- | --------------------- | --- |
+| `android`       |     | `flag`        |     | `person`              |     |
+| `bookmark_add`  |     | `fullscreen`  |     | `play_arrow`          |     |
+| `call`          |     | `grid_view`   |     | `refresh`             |     |
+| `category`      |     | `home`        |     | `schedule`            |     |
+| `chat`          |     | `info`        |     | `search`              |     |
+| `check`         |     | `ios_share`   |     | `settings`            |     |
+| `chevron_left`  |     | `language`    |     | `share`               |     |
+| `chevron_right` |     | `live_tv`     |     | `signal_cellular_alt` |     |
+| `close`         |     | `lock`        |     | `star`                |     |
+| `dark_mode`     |     | `mail`        |     | `support_agent`       |     |
+| `delete`        |     | `movie`       |     | `tv`                  |     |
+| `download`      |     | `more_vert`   |     | `volume_up`           |     |
+| `error`         |     | `open_in_new` |     | `wifi`                |     |
+| `expand_more`   |     | `pause`       |     | `wifi_off`            |     |
 
 ### Adding an icon
 
@@ -91,7 +89,7 @@ ligature in the font, so a typo fails loudly rather than shipping a blank icon.
    after the first run).
 2. Walks the font's `rlig` lookups and collects every glyph each requested icon
    needs — the ligature's component glyphs **and** its output glyph. Pyftsubset
-   drops a ligature rule if *any* component is missing, so all of them must be
+   drops a ligature rule if _any_ component is missing, so all of them must be
    kept.
 3. Runs `pyftsubset` with an explicit glyph list and `--no-layout-closure`.
    Without that flag, GSUB closure pulls in all ~6600 glyphs and the "subset"
@@ -127,6 +125,6 @@ committed.
 
 ### Fonts loaded at runtime
 
-- `public/fonts/material-symbols-rounded.woff2` — the icon subset (~41 KB),
+- `public/fonts/material-symbols-rounded.woff2` — the icon subset (~42 KB),
   variable font (FILL/wght/GRAD/opsz axes).
 - `public/fonts/sora-{400,600,700}.ttf` — the Sora text faces.

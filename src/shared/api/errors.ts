@@ -28,6 +28,9 @@ export class ApiError extends Error {
   readonly requestId: string | null
   /** Seconds until the client may retry (from Retry-After or body). */
   readonly retryAfterSeconds: number | null
+  /** True when the failure body carried its own `message`, false when the
+   *  client synthesized one from the status code (e.g. a non-JSON body). */
+  readonly hasServerMessage: boolean
 
   constructor(options: {
     status: number
@@ -35,6 +38,7 @@ export class ApiError extends Error {
     message: string
     requestId?: string | null
     retryAfterSeconds?: number | null
+    hasServerMessage?: boolean
   }) {
     super(options.message)
     this.name = 'ApiError'
@@ -42,6 +46,7 @@ export class ApiError extends Error {
     this.code = options.code
     this.requestId = options.requestId ?? null
     this.retryAfterSeconds = options.retryAfterSeconds ?? null
+    this.hasServerMessage = options.hasServerMessage ?? false
   }
 
   /** True when the failure was a network/DNS/timeout problem, not an HTTP error. */
