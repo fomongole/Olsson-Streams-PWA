@@ -3,4 +3,6 @@ dist
 dev-dist
 *.local
 .DS_Store
+.font-cache
+.venv-icons
 *.tsbuildinfo

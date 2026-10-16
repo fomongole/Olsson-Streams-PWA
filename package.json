@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty",
     "lint": "eslint .",
+    "icons": "python3 scripts/build-icons.py",
     "format": "prettier --write ."
   },
   "dependencies": {

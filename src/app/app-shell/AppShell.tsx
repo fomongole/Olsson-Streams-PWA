@@ -1,11 +1,12 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { downloadsEnabled } from '@/features/config/AppConfigProvider'
 import { InstallBanners } from '@/features/install-banner/InstallBanners'
+import { Icon, type IconName } from '@/components/ui/Icon'
 
 interface Tab {
   to: string
   label: string
-  icon: string
+  icon: IconName
 }
 
 const TABS: Tab[] = [
@@ -46,9 +47,7 @@ export function AppShell() {
             end={tab.to === '/'}
             className={({ isActive }) => tabClass(isActive)}
           >
-            <span className="msym text-[22px]" aria-hidden>
-              {tab.icon}
-            </span>
+            <Icon name={tab.icon} className="text-[22px]" />
             <span className="text-[10px] font-semibold tracking-wide">{tab.label}</span>
           </NavLink>
         ))}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { isAndroid, isDesktop, isIos, isStandalone } from '@/shared/platform/detect'
 import { useAppConfig } from '@/features/config/AppConfigProvider'
+import { Icon } from '@/components/ui/Icon'
 
 const IOS_DISMISSED_KEY = 'install_banner_ios_dismissed'
 const APK_DISMISSED_KEY = 'install_banner_apk_dismissed'
@@ -48,9 +49,7 @@ export function InstallBanners() {
     return (
       <div className="sticky top-0 z-40 border-b border-border bg-surface px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-top))]">
         <div className="mx-auto flex max-w-3xl items-start gap-3">
-          <span className="msym mt-0.5 text-accent" aria-hidden>
-            ios_share
-          </span>
+          <Icon name="ios_share" className="mt-0.5 text-accent" />
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-text">Install Olsson Streams</p>
             <p className="mt-0.5 text-xs text-text-muted">
@@ -79,9 +78,7 @@ export function InstallBanners() {
   return (
     <div className="sticky top-0 z-40 border-b border-border bg-surface px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-top))]">
       <div className="mx-auto flex max-w-3xl items-start gap-3">
-        <span className="msym mt-0.5 text-accent" aria-hidden>
-          android
-        </span>
+          <Icon name="android" className="mt-0.5 text-accent" />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-text">Get the app</p>
           <p className="mt-0.5 text-xs text-text-muted">
