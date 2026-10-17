@@ -17,7 +17,7 @@ export function ToastHost() {
 
   return (
     <div
-      className="pointer-events-none fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom)+1rem)] z-50 flex justify-center px-5 md:bottom-6"
+      className="pointer-events-none fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom)+1rem)] z-50 flex justify-center px-5 lg:bottom-6"
       role="status"
       aria-live="polite"
     >

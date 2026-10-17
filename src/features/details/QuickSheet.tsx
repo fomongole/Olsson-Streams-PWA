@@ -33,7 +33,7 @@ function sheetMetadata(movie: Movie): string {
 /**
  * CompactMediaBottomSheet.kt, in movie form (`showOverview = false`).
  *
- * Android presents this as a ModalBottomSheet; below `md` the PWA does the
+ * Android presents this as a ModalBottomSheet; below `lg` the PWA does the
  * same. On a desktop-width viewport it becomes a centred modal instead —
  * a bottom sheet on a 1440px screen looks like an accident.
  */
@@ -68,11 +68,11 @@ export function QuickSheet({ movie, onClose }: { movie: Movie; onClose: () => vo
         className="absolute inset-0 bg-black/[0.64]"
       />
 
-      <div className="absolute inset-x-0 bottom-0 flex max-h-[90vh] flex-col rounded-t-[28px] bg-surface text-white shadow-[0_-8px_32px_rgba(0,0,0,0.6)] md:inset-auto md:left-1/2 md:top-1/2 md:w-[560px] md:max-w-[92vw] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-[16px]">
+      <div className="absolute inset-x-0 bottom-0 flex max-h-[90vh] flex-col rounded-t-[28px] bg-surface text-white shadow-[0_-8px_32px_rgba(0,0,0,0.6)] lg:inset-auto lg:left-1/2 lg:top-1/2 lg:w-[560px] lg:max-w-[92vw] lg:-translate-x-1/2 lg:-translate-y-1/2 lg:rounded-[16px]">
         {/* Material3's default sheet drag handle — hidden on the desktop modal. */}
-        <span className="mx-auto mt-[8px] h-[4px] w-[32px] shrink-0 rounded-[2px] bg-white/40 md:hidden" />
+        <span className="mx-auto mt-[8px] h-[4px] w-[32px] shrink-0 rounded-[2px] bg-white/40 lg:hidden" />
 
-        <div className="overflow-y-auto px-[20px] pt-[12px] pb-[20px] md:pt-[20px]">
+        <div className="overflow-y-auto px-[20px] pt-[12px] pb-[20px] lg:pt-[20px]">
           <div className="flex items-end gap-[16px]">
             <div className="relative h-[210px] w-[140px] shrink-0 overflow-hidden rounded-[8px] bg-surface-variant">
               <img

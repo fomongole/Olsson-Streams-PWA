@@ -1,6 +1,6 @@
 import { Icon } from '@/components/ui/Icon'
 import type { MovieDetails } from '@/shared/api/endpoints'
-import { formatDuration } from '@/features/home/movieMeta'
+import { formatDuration, releaseYear } from '@/features/home/movieMeta'
 
 /**
  * DetailsHeader.kt — the scrollable poster + info row that slides over the
@@ -19,15 +19,15 @@ export function DetailsHeader({
   onVjClick: (vj: string) => void
 }) {
   const vj = details.vj.trim()
-  const year = details.release_date.length >= 4 ? details.release_date.slice(0, 4) : ''
+  const year = releaseYear(details.release_date)
   const duration = formatDuration(details.duration)
 
   return (
-    <div className="flex items-end gap-[14px] px-4 pt-[160px] md:px-6 md:pt-[240px]">
+    <div className="page-container flex items-end gap-[14px] px-4 pt-[160px] lg:px-8 lg:pt-[240px]">
       <img
         src={details.poster_url || details.backdrop_url}
         alt=""
-        className="h-[168px] w-[115px] shrink-0 rounded-[12px] border-[0.8px] border-border bg-surface-variant object-cover shadow-[0_12px_24px_rgba(0,0,0,0.45)] md:h-[360px] md:w-[246px]"
+        className="h-[168px] w-[115px] shrink-0 rounded-[12px] border-[0.8px] border-border bg-surface-variant object-cover shadow-[0_12px_24px_rgba(0,0,0,0.45)] lg:h-[360px] lg:w-[246px]"
       />
 
       <div className="min-w-0 flex-1">

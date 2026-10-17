@@ -94,21 +94,27 @@ export function HeroBanner({
           z-10, so a z-auto dot row would paint underneath it and never
           receive a click. */}
       {!posterMode && canSlide && (
-        <div className="absolute inset-x-0 bottom-0 z-30 flex justify-center gap-[6px] pt-[10px]">
-          {items.map((movie, dotIndex) => (
-            <button
-              key={stableMovieKey(movie, dotIndex)}
-              type="button"
-              aria-label={`Go to slide ${String(dotIndex + 1)}`}
-              aria-current={dotIndex === index}
-              onClick={() => goTo(dotIndex)}
-              className={`rounded-full ${
-                dotIndex === index
-                  ? 'h-[8px] w-[8px] bg-accent'
-                  : 'h-[5px] w-[5px] bg-white/35'
-              }`}
-            />
-          ))}
+        <div className="absolute inset-x-0 bottom-0 z-30 pt-[10px]">
+          {/* Same container as the caption, so the dots share its left edge on
+              desktop while staying bottom-centred on mobile. */}
+          <div className="page-container px-[16px] lg:px-8">
+            <div className="flex justify-center gap-[6px] lg:justify-start">
+              {items.map((movie, dotIndex) => (
+                <button
+                  key={stableMovieKey(movie, dotIndex)}
+                  type="button"
+                  aria-label={`Go to slide ${String(dotIndex + 1)}`}
+                  aria-current={dotIndex === index}
+                  onClick={() => goTo(dotIndex)}
+                  className={`rounded-full ${
+                    dotIndex === index
+                      ? 'h-[8px] w-[8px] bg-accent'
+                      : 'h-[5px] w-[5px] bg-white/35'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -132,7 +138,9 @@ function HeroSlide({
 
   return (
     <article
-      className={`relative w-full shrink-0 snap-start ${posterMode ? 'h-[380px]' : 'h-[430px]'}`}
+      className={`relative w-full shrink-0 snap-start ${
+        posterMode ? 'h-[380px]' : 'h-[430px]'
+      } lg:h-[70vh] lg:max-h-[700px] lg:min-h-[520px]`}
     >
       <div className="absolute inset-0 overflow-hidden bg-bg">
         <img
@@ -141,6 +149,9 @@ function HeroSlide({
           className={`h-full w-full object-cover${posterMode ? ' blur-[24px]' : ''}`}
         />
         <div className="absolute inset-0" style={{ background: HERO_SCRIM }} />
+        {!posterMode && (
+          <div className="hero-scrim-left absolute inset-0 hidden lg:block" />
+        )}
       </div>
 
       {/* Tap-anywhere target, sitting under the caption and its buttons. */}
@@ -152,7 +163,7 @@ function HeroSlide({
       />
 
       {posterMode ? (
-        <div className="relative z-20 flex h-full flex-col items-center justify-center px-[20px] py-[16px] text-center">
+        <div className="page-container relative z-20 flex h-full flex-col items-center justify-center px-[20px] py-[16px] text-center lg:px-8">
           <img
             src={movie.poster_url || movie.backdrop_url}
             alt=""
@@ -173,43 +184,51 @@ function HeroSlide({
           )}
         </div>
       ) : (
-        <div className="relative z-20 flex h-full flex-col justify-end px-[20px] pb-[24px] pt-[24px]">
-          <div className="flex items-center gap-[8px]">
-            {vj !== '' && (
-              <span className="t-label-sm rounded-[4px] bg-accent px-[7px] py-[3px] font-bold text-white">
-                {vj}
-              </span>
+        <div className="page-container relative z-20 flex h-full flex-col justify-end px-[20px] pb-[24px] pt-[24px] lg:px-8 lg:pb-[56px]">
+          {/* Capped at ~600px so the synopsis keeps a readable measure on a
+              wide viewport instead of running the full container width. */}
+          <div className="w-full lg:max-w-[600px]">
+            <div className="flex items-center gap-[8px]">
+              {vj !== '' && (
+                <span className="t-label-sm rounded-[4px] bg-accent px-[7px] py-[3px] font-bold text-white">
+                  {vj}
+                </span>
+              )}
+              {genre !== '' && (
+                <span className="t-label-sm rounded-[4px] bg-surface-variant px-[7px] py-[3px] text-gold">
+                  {genre.toUpperCase()}
+                </span>
+              )}
+            </div>
+
+            <h2 className="t-display-md mt-[8px] line-clamp-2 lg:mt-[14px] lg:text-[64px] lg:leading-[72px]">
+              {movie.title}
+            </h2>
+
+            {movie.overview.trim() !== '' && (
+              <p className="t-body-md mt-[6px] line-clamp-2 lg:mt-[14px] lg:text-[15px] lg:leading-[24px]">
+                {movie.overview}
+              </p>
             )}
-            {genre !== '' && (
-              <span className="t-label-sm rounded-[4px] bg-surface-variant px-[7px] py-[3px] text-gold">
-                {genre.toUpperCase()}
-              </span>
-            )}
-          </div>
 
-          <h2 className="t-display-md mt-[8px] line-clamp-2">{movie.title}</h2>
-
-          {movie.overview.trim() !== '' && (
-            <p className="t-body-md mt-[6px] line-clamp-2">{movie.overview}</p>
-          )}
-
-          <div className="mt-[16px] flex gap-[12px]">
-            <button
-              type="button"
-              onClick={() => onWatchNow(movie)}
-              className="t-label-lg flex h-[44px] items-center rounded-[8px] bg-accent px-[16px] text-white"
-            >
-              <Icon name="play_arrow" className="mr-[6px] text-[20px] text-white" />
-              Watch Now
-            </button>
-            <button
-              type="button"
-              onClick={() => onMovieClick(movie)}
-              className="t-label-lg flex h-[44px] items-center rounded-[8px] border border-white/40 bg-transparent px-[16px] text-white"
-            >
-              <Icon name="info" className="mr-[6px] text-[18px] text-white" />
-              Details
-            </button>
+            <div className="mt-[16px] flex gap-[12px]">
+              <button
+                type="button"
+                onClick={() => onWatchNow(movie)}
+                className="t-label-lg flex h-[44px] items-center rounded-[8px] bg-accent px-[16px] text-white transition-colors lg:hover:bg-accent-pressed"
+              >
+                <Icon name="play_arrow" className="mr-[6px] text-[20px] text-white" />
+                Watch Now
+              </button>
+              <button
+                type="button"
+                onClick={() => onMovieClick(movie)}
+                className="t-label-lg flex h-[44px] items-center rounded-[8px] border border-white/40 bg-transparent px-[16px] text-white transition-colors lg:hover:border-white/70 lg:hover:bg-white/10"
+              >
+                <Icon name="info" className="mr-[6px] text-[18px] text-white" />
+                Details
+              </button>
+            </div>
           </div>
         </div>
       )}

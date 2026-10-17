@@ -14,7 +14,7 @@ export function HomeTopFloatingBar({
   onNavigateToProfile: () => void
 }) {
   return (
-    <div className="absolute right-[16px] top-[calc(env(safe-area-inset-top)+8px)] z-30 flex h-[52px] items-center rounded-[36px] border border-border/50 bg-surface/[0.92] px-[6px] py-[4px] shadow-[0_4px_32px_rgba(0,0,0,0.45)] md:hidden">
+    <div className="absolute right-[16px] top-[calc(env(safe-area-inset-top)+8px)] z-30 flex h-[52px] items-center rounded-[36px] border border-border/50 bg-surface/[0.92] px-[6px] py-[4px] shadow-[0_4px_32px_rgba(0,0,0,0.45)] lg:hidden">
       <button
         type="button"
         aria-label="Profile"

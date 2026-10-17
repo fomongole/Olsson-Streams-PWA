@@ -61,12 +61,16 @@ export function HomeScreen() {
   return (
     <div className="relative min-h-full bg-bg">
       {error != null && !hasContent ? (
-        <ErrorState
-          title={isOnline ? 'Something went wrong' : "You're offline"}
-          icon={isOnline ? 'error' : 'wifi_off'}
-          message={homeErrorMessage(error)}
-          onRetry={() => void refetch()}
-        />
+        // Clears the fixed desktop header — Home's hero normally does this job,
+        // but the error branch has no hero to sit under.
+        <div className="lg:pt-[72px]">
+          <ErrorState
+            title={isOnline ? 'Something went wrong' : "You're offline"}
+            icon={isOnline ? 'error' : 'wifi_off'}
+            message={homeErrorMessage(error)}
+            onRetry={() => void refetch()}
+          />
+        </div>
       ) : isLoading && !hasContent ? (
         <HomeSkeleton />
       ) : (
@@ -76,10 +80,12 @@ export function HomeScreen() {
           {hero.length > 0 ? (
             <HeroBanner items={hero} onMovieClick={openMovie} onWatchNow={openMovie} />
           ) : (
-            <div className="h-[430px] w-full shimmer" />
+            <div className="h-[430px] w-full shimmer lg:h-[70vh] lg:max-h-[700px]" />
           )}
 
-          <div className="px-[16px] pt-[14px]">
+          {/* The desktop header owns search as a 300px field, so the full-width
+              launcher stays a mobile affordance only. */}
+          <div className="px-[16px] pt-[14px] lg:hidden">
             <button
               type="button"
               onClick={() => navigate('/search')}
@@ -91,7 +97,7 @@ export function HomeScreen() {
               </span>
             </button>
           </div>
-          <div className="h-[12px]" />
+          <div className="h-[12px] lg:h-[28px]" />
 
           {isLoading && latest.length === 0 ? (
             [0, 1, 2, 3, 4].map((row) => <ShelfSkeleton key={row} />)

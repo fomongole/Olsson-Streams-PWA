@@ -349,6 +349,55 @@
   }
 }
 
+/* ---- Desktop layout (>=1024px) ---- */
+
+/*
+ * The shared page container. Declared without padding so a call site keeps
+ * whatever mobile padding the Android layout uses (`px-[16px]`, `px-[20px]`);
+ * desktop padding comes from the `lg:px-8` utility, which always wins over
+ * this components-layer rule. Nav, hero text, shelf headers and shelf rows all
+ * use it, which is what puts them on one left edge.
+ */
+@layer components {
+  .page-container {
+    width: 100%;
+    max-width: 1600px;
+    margin-inline: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  /*
+   * Poster rails scale with the viewport instead of staying pinned at the
+   * mobile 135px: ~207px at 1440, clamped so 1024 and 1920 stay sane.
+   * `195/135 = 1.4444` is the Android poster aspect.
+   */
+  .shelf-row {
+    --poster-w: clamp(176px, 14.4vw, 264px);
+  }
+
+  /* Park the rail's arrow on the vertical centre of the poster, not the
+     centre of the whole card (title + meta sit below the art). */
+  .shelf-arrow {
+    top: calc(8px + (var(--poster-w) * 1.4444) / 2);
+  }
+
+  /*
+   * The hero's left-hand darkening. Android has no equivalent — its scrim is
+   * the vertical four-stop ramp — but on a wide viewport the caption sits in
+   * the left third and needs the extra contrast the phone layout gets from
+   * simply being narrow.
+   */
+  .hero-scrim-left {
+    background: linear-gradient(
+      to right,
+      rgba(14, 22, 33, 0.75) 0%,
+      rgba(14, 22, 33, 0.35) 42%,
+      rgba(14, 22, 33, 0) 72%
+    );
+  }
+}
+
 /* ---- Scroll containers ---- */
 
 /*

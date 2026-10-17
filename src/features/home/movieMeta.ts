@@ -10,9 +10,23 @@ export function primaryGenre(genres: string): string {
   )
 }
 
-/** Compose's `String.take(4)` — a bare year prefix, possibly empty. */
+/**
+ * Android reads `releaseDate.take(4)` verbatim, which is how a card ends up
+ * showing "-108": the API's `release_date` is a passthrough of whatever the
+ * provider stored (`FormatHelper::parseReleaseDate` only rewrites empty/`0`
+ * and all-digit values), and `movieMeta` never transforms it. The reference
+ * Flutter app rejects anything `int.tryParse` can't read but still accepts
+ * "-108", so it isn't a real guard either.
+ *
+ * Show the year only when the first four characters are a plausible calendar
+ * year; otherwise return '' so the meta line drops it and shows genre alone.
+ */
 export function releaseYear(releaseDate: string): string {
-  return releaseDate.slice(0, 4)
+  const candidate = releaseDate.slice(0, 4)
+  if (!/^\d{4}$/.test(candidate)) return ''
+  const year = Number(candidate)
+  const maxYear = new Date().getFullYear() + 1
+  return year >= 1900 && year <= maxYear ? candidate : ''
 }
 
 /** "2018 • Action" — the meta line under a Home poster. Blank when unusable. */

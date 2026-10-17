@@ -159,9 +159,9 @@ export function DetailsScreen() {
          * 180px. On desktop the last three blocks become two columns: identity
          * and actions on the left, the synopsis reading column on the right.
          */}
-        <div className="body-fade px-4 pt-[14px] md:grid md:grid-cols-[minmax(0,320px)_minmax(0,1fr)] md:gap-x-10 md:px-6 md:pt-[20px]">
+        <div className="body-fade page-container px-4 pt-[14px] lg:grid lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)] lg:gap-x-10 lg:px-8 lg:pt-[20px]">
           {genres.length > 0 && (
-            <div className="flex flex-wrap gap-[8px] md:col-start-1 md:row-start-1">
+            <div className="flex flex-wrap gap-[8px] lg:col-start-1 lg:row-start-1">
               {genres.map((genre) => (
                 <button
                   key={genre}
@@ -178,7 +178,7 @@ export function DetailsScreen() {
             </div>
           )}
 
-          <div className="mt-[16px] md:col-start-1 md:row-start-2">
+          <div className="mt-[16px] lg:col-start-1 lg:row-start-2">
             <button
               type="button"
               disabled={!hasStream}
@@ -207,7 +207,7 @@ export function DetailsScreen() {
 
           {/* Sparse metadata must not leave a heading with nothing under it. */}
           {overview !== '' && (
-            <div className="mt-[20px] md:col-start-2 md:row-span-2 md:row-start-1 md:mt-0">
+            <div className="mt-[20px] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mt-0">
               <div className="flex items-center">
                 <span className="h-[20px] w-[4px] rounded-[2px] bg-accent" />
                 <h2 className="t-headline-md ml-[8px] font-bold">Storyline</h2>

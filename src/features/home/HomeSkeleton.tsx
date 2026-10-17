@@ -33,8 +33,8 @@ export function ShelfSkeleton() {
 
 function HeroSkeleton() {
   return (
-    <div className="relative h-[430px] w-full shimmer">
-      <div className="absolute bottom-[16px] left-[16px]">
+    <div className="relative h-[430px] w-full shimmer lg:h-[70vh] lg:max-h-[700px] lg:min-h-[520px]">
+      <div className="page-container absolute inset-x-0 bottom-[16px] px-[16px] lg:px-8">
         <div className="h-[22px] w-[240px] rounded-[8px] bg-bg/40" />
         <div className="mt-[10px] h-[16px] w-[150px] rounded-[8px] bg-bg/40" />
         <div className="mt-[18px] flex gap-[10px]">

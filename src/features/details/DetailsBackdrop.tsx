@@ -15,7 +15,7 @@ const BASE_SCRIM =
   'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(14,22,33,0.75) 72%, #0e1621 100%)'
 
 /** Matches `280.dp` in Android; the desktop width gets a wider crop. */
-export const BACKDROP_HEIGHT = 'h-[280px] md:h-[460px]'
+export const BACKDROP_HEIGHT = 'h-[280px] lg:h-[460px]'
 
 export function DetailsBackdrop({
   details,

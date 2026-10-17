@@ -126,8 +126,8 @@ export function AccessScreen({ notice }: { notice?: string | null }) {
     // the scroll container: auto margins collapse to 0 when content overflows
     // (keyboard open, landscape), so the wordmark stays reachable. Centering
     // the container itself would clip the top of a scrollable region.
-    <div className="flex min-h-dvh w-full flex-col overflow-y-auto bg-bg px-7 py-6">
-      <div className="m-auto w-full max-w-[520px]">
+    <div className="flex min-h-dvh w-full flex-col overflow-y-auto bg-bg px-7 py-6 lg:px-10 lg:py-12">
+      <div className="m-auto w-full max-w-[520px] lg:rounded-card lg:border lg:border-border lg:bg-surface lg:px-12 lg:py-14 lg:shadow-[0_24px_64px_rgba(0,0,0,0.45)]">
         <img
           src="/brand_wordmark.png"
           alt="Olsson Streams"

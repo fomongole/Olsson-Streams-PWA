@@ -21,8 +21,8 @@ export function DetailsSkeleton() {
         />
       </div>
 
-      <div className="flex items-end gap-[14px] px-4 pt-[160px] md:px-6 md:pt-[240px]">
-        <div className="h-[168px] w-[115px] shrink-0 rounded-[12px] shimmer md:h-[360px] md:w-[246px]" />
+      <div className="page-container flex items-end gap-[14px] px-4 pt-[160px] lg:px-8 lg:pt-[240px]">
+        <div className="h-[168px] w-[115px] shrink-0 rounded-[12px] shimmer lg:h-[360px] lg:w-[246px]" />
         <div className="min-w-0 flex-1 pb-[4px]">
           <div className="h-[22px] w-[90%] rounded-[8px] shimmer" />
           <div className="mt-[10px] h-[22px] w-[60%] rounded-[8px] shimmer" />
@@ -31,7 +31,7 @@ export function DetailsSkeleton() {
         </div>
       </div>
 
-      <div className="body-fade mt-[14px] px-4 pb-[24px] md:px-6">
+      <div className="body-fade page-container mt-[14px] px-4 pb-[24px] lg:px-8">
         <div className="flex flex-wrap gap-[8px]">
           {[62, 74, 56].map((width) => (
             <span
