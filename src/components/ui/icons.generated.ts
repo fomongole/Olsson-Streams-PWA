@@ -50,3 +50,5 @@ export type IconName =
   | 'nightlight_round'
   | 'rocket_launch'
   | 'explore'
+  | 'arrow_back'
+  | 'file_download'

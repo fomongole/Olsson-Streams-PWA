@@ -59,6 +59,106 @@
   --radius-input: 14px;
 }
 
+/* ---- Type scale (from Android Type.kt / OlssonTypography) ---- */
+
+/*
+ * These are NOT Material3 defaults — `OlssonTypography` overrides the size,
+ * weight and colour of every slot the app uses (registered Sora weights are
+ * 400/600/700 only). Declared in @layer components so a `font-bold` or
+ * `text-gold` utility can still override the defaults when a call site
+ * deviates the way Android does (e.g. `.copy(fontWeight = FontWeight.Bold)`).
+ *
+ * Slot naming follows Material3: `headlineMedium` -> `.t-headline-md`.
+ * `headlineSmall`, `displaySmall` and below-the-waist slots the app never
+ * references fall through to Material3's own defaults in Android.
+ */
+@layer components {
+  .t-display-lg {
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .t-display-md {
+    font-size: 26px;
+    line-height: 34px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .t-headline-lg {
+    font-size: 22px;
+    line-height: 28px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .t-headline-md {
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .t-title-lg {
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .t-title-md {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .t-body-lg {
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
+  .t-body-md {
+    font-size: 13px;
+    line-height: 19px;
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
+  .t-body-sm {
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: 400;
+    color: var(--color-text-subtle);
+  }
+
+  /* Labels declare no lineHeight in Type.kt, so they inherit natural metrics. */
+  .t-label-lg {
+    font-size: 13px;
+    line-height: normal;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .t-label-md {
+    font-size: 11px;
+    line-height: normal;
+    font-weight: 600;
+    color: var(--color-text-muted);
+  }
+
+  .t-label-sm {
+    font-size: 10px;
+    line-height: normal;
+    font-weight: 600;
+    color: var(--color-text-subtle);
+  }
+}
+
 @layer base {
   html,
   body,
@@ -223,6 +323,29 @@
   .shimmer {
     animation: none;
     background-position: 0 0;
+  }
+}
+
+/* ---- Details body fade ---- */
+
+/*
+ * The body wrapper in DetailsScreen.kt fades from transparent into the page
+ * background over its first 180dp (`verticalGradient(0f Transparent,
+ * 0.6f Background@0.85, 1f Background)`, endY = bodyFadePx) so the hand-off
+ * from backdrop to body never draws a hard line. `background-size` keeps the
+ * ramp to 180px instead of stretching it over the whole section.
+ */
+@layer components {
+  .body-fade {
+    background-color: var(--color-bg);
+    background-image: linear-gradient(
+      to bottom,
+      rgba(14, 22, 33, 0) 0%,
+      rgba(14, 22, 33, 0.85) 60%,
+      #0e1621 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 100% 180px;
   }
 }
 

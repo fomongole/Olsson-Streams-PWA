@@ -3,10 +3,10 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AccessScreen } from '@/features/auth/AccessScreen'
 import { loadSession, onSessionChanged, onUnauthorized } from '@/shared/api/session'
 import { AppShell } from './app-shell/AppShell'
+import { DetailsScreen } from './screens/DetailsScreen'
 import { HomeScreen } from './screens/HomeScreen'
 import {
   CategoryScreen,
-  DetailsScreen,
   GenresScreen,
   NotFoundScreen,
   ProfileScreen,
@@ -43,14 +43,16 @@ export function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Full-bleed: no tab bar or desktop header over the cinematic
+            backdrop. The title and any source pin live in the query string so
+            a refresh or a shared link resolves the same record (routes.ts). */}
+        <Route path="/details/:movieId" element={<DetailsScreen />} />
         <Route element={<AppShell />}>
           <Route index element={<HomeScreen />} />
           <Route path="series" element={<SeriesScreen />} />
           <Route path="genres" element={<GenresScreen />} />
           <Route path="search" element={<SearchScreen />} />
-          {/* Real in Phase 5 / 8 / 9; routed now so Home taps land somewhere. */}
-          <Route path="details" element={<DetailsScreen />} />
-          <Route path="category/:sectionId" element={<CategoryScreen />} />
+          <Route path="category/:title/:genre/:filterKey" element={<CategoryScreen />} />
           <Route path="profile" element={<ProfileScreen />} />
           <Route path="access" element={<Navigate to="/" replace />} />
           <Route path="*" element={<NotFoundScreen />} />

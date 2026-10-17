@@ -126,8 +126,12 @@ export function verifyAccessCodeRequest(code: string, deviceId: string) {
 
 /* ---- GET /home ---- */
 
-/** Every movie item the home feed returns: MovieDto::toArray() plus decorate(). */
-export interface HomeMovie {
+/**
+ * The shared wire item: `MovieDto::toArray()` plus `decorate()`'s source
+ * reference fields. Used by every movie list (home shelves, category results,
+ * related rail) and as the base of the details payload.
+ */
+export interface Movie {
   id: string | number
   tmdb_id: number
   canonical_tmdb_id: number | null
@@ -162,12 +166,12 @@ export interface HomeSection {
   icon: string
   type: string
   genre?: string
-  items: HomeMovie[]
+  items: Movie[]
 }
 
 export interface HomeFeed {
-  hero: HomeMovie[]
-  latest: HomeMovie[]
+  hero: Movie[]
+  latest: Movie[]
   /** Non-empty rails only; the client renders exactly this list. */
   sections: HomeSection[]
   /**
@@ -175,18 +179,70 @@ export interface HomeFeed {
    * are always empty, the rest duplicate their `sections` entry. Nothing reads
    * them — `sections` is the source of truth for the shelves.
    */
-  action: HomeMovie[]
-  adventure: HomeMovie[]
-  vj_junior: HomeMovie[]
-  comedy: HomeMovie[]
-  drama: HomeMovie[]
-  vj_emmy: HomeMovie[]
-  animation: HomeMovie[]
-  horror: HomeMovie[]
-  vj_ulio: HomeMovie[]
-  scifi: HomeMovie[]
+  action: Movie[]
+  adventure: Movie[]
+  vj_junior: Movie[]
+  comedy: Movie[]
+  drama: Movie[]
+  vj_emmy: Movie[]
+  animation: Movie[]
+  horror: Movie[]
+  vj_ulio: Movie[]
+  scifi: Movie[]
 }
 
 export function fetchHome(): Promise<HomeFeed> {
   return apiGet<HomeFeed>('home')
+}
+
+/* ---- GET /movies/{id}  and  GET /catalog/source/{reference} ---- */
+
+export interface StreamServer {
+  server_name: string
+  /** Already scheme-checked server-side: only http(s) survives the DTO. */
+  url: string
+  quality: string
+  /** Only `referer` / `origin` / `user-agent` are ever forwarded. */
+  headers: Record<string, string>
+  download_url?: string | null
+}
+
+/** `MovieDetailsDto::toArray()` — the `Movie` payload plus the stream servers. */
+export interface MovieDetails extends Movie {
+  servers: StreamServer[]
+  /** Only on `/catalog/source/{reference}`: is the saved item's provider the
+   *  one this session is pinned to? Gates browsing chips in Android. */
+  source_is_current?: boolean
+  content_type?: string
+}
+
+/**
+ * `sourceRef` switches the lookup to the source-pinned endpoint, which is what
+ * Android does whenever the tapped item carried a reference (`pinnedSource`).
+ * It fetches the same record from the provider that produced it, so a provider
+ * failover between the list and the detail cannot swap the title under you.
+ */
+export function fetchMovieDetails(id: string, sourceRef?: string): Promise<MovieDetails> {
+  return apiGet<MovieDetails>(
+    sourceRef
+      ? `catalog/source/${encodeURIComponent(sourceRef)}`
+      : `movies/${encodeURIComponent(id)}`,
+  )
+}
+
+/** `GET /movies` — paged list; the details screen uses it for the related rail. */
+export interface MovieListResponse {
+  items: Movie[]
+  page: number
+  total_pages: number
+  total_results: number
+  has_more: boolean
+}
+
+export function fetchMoviesByGenre(
+  genre: string,
+  limit = 15,
+): Promise<MovieListResponse> {
+  const query = new URLSearchParams({ page: '1', limit: String(limit), genre })
+  return apiGet<MovieListResponse>(`movies?${query.toString()}`)
 }

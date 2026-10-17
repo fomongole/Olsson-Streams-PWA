@@ -21,9 +21,13 @@ const TABS: Tab[] = [
 ]
 
 function tabClass(isActive: boolean): string {
+  // BottomNavBar.kt: each tab is a 56dp capsule that widens 48 -> 124dp when
+  // selected, fills AccentBlue, and only then reveals its label.
   return [
-    'flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 pt-1 transition-colors',
-    isActive ? 'text-accent' : 'text-text-muted',
+    'flex h-[56px] items-center justify-center overflow-hidden rounded-[28px] transition-all duration-300 ease-out',
+    isActive
+      ? 'w-[124px] bg-accent text-white'
+      : 'w-[48px] bg-transparent text-text-subtle',
   ].join(' ')
 }
 
@@ -33,26 +37,43 @@ export function AppShell() {
   return (
     <div className="flex min-h-dvh flex-col bg-bg">
       <InstallBanners />
-      <main className="flex-1 pb-[calc(3.5rem+env(safe-area-inset-bottom))] md:pb-0">
+      <main className="flex-1 pb-[calc(78px+env(safe-area-inset-bottom))] md:pb-0">
         <Outlet />
       </main>
 
-      {/* Mobile: bottom navigation */}
+      {/* Mobile: floating pill dock (Box padding 6/16 + the 56dp row = 78px) */}
       <nav
         aria-label="Primary"
-        className="fixed inset-x-0 bottom-0 z-40 flex border-t border-border bg-surface pb-[env(safe-area-inset-bottom)] md:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 flex justify-center px-2 pt-1.5 pb-[calc(16px+env(safe-area-inset-bottom))] md:hidden"
       >
-        {TABS.map((tab) => (
-          <NavLink
-            key={tab.to}
-            to={tab.to}
-            end={tab.to === '/'}
-            className={({ isActive }) => tabClass(isActive)}
-          >
-            <Icon name={tab.icon} className="text-[22px]" />
-            <span className="text-[10px] font-semibold tracking-wide">{tab.label}</span>
-          </NavLink>
-        ))}
+        <div className="flex items-center gap-0.5 rounded-[36px] border border-border/50 bg-surface/92 px-1.5 py-1 shadow-[0_8px_32px_rgba(0,0,0,0.7)]">
+          {TABS.map((tab) => (
+            <NavLink
+              key={tab.to}
+              to={tab.to}
+              end={tab.to === '/'}
+              className={({ isActive }) => tabClass(isActive)}
+            >
+              {({ isActive }) => (
+                <>
+                  <Icon
+                    name={tab.icon}
+                    className={`text-[24px] transition-transform duration-300 ease-out ${isActive ? 'scale-110' : ''}`}
+                  />
+                  <span
+                    className={`whitespace-nowrap text-[12px] font-bold tracking-[0.3px] text-white transition-all duration-300 ease-out ${
+                      isActive
+                        ? 'ml-2 max-w-[72px] opacity-100'
+                        : 'ml-0 max-w-0 opacity-0'
+                    }`}
+                  >
+                    {tab.label}
+                  </span>
+                </>
+              )}
+            </NavLink>
+          ))}
+        </div>
       </nav>
 
       {/* Desktop: cinematic top navigation */}

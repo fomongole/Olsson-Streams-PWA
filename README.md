@@ -47,25 +47,25 @@ compile error.
 
 ### Icons currently in the subset
 
-| Name          | Name            | Name                      |
-| ------------- | --------------- | ------------------------- |
-| `android`     | `animation`     | `bookmark_add`            |
-| `call`        | `category`      | `chat`                    |
-| `check`       | `chevron_left`  | `chevron_right`           |
-| `close`       | `dark_mode`     | `delete`                  |
-| `download`    | `error`         | `expand_more`             |
-| `explore`     | `flag`          | `flash_on`                |
-| `fullscreen`  | `grid_view`     | `home`                    |
-| `info`        | `ios_share`     | `language`                |
-| `live_tv`     | `lock`          | `mail`                    |
-| `more_vert`   | `movie`         | `nightlight_round`        |
-| `open_in_new` | `pause`         | `person`                  |
-| `play_arrow`  | `refresh`       | `rocket_launch`           |
-| `schedule`    | `search`        | `sentiment_satisfied_alt` |
-| `settings`    | `share`         | `signal_cellular_alt`     |
-| `star`        | `support_agent` | `theater_comedy`          |
-| `tv`          | `volume_up`     | `wifi`                    |
-| `wifi_off`    |                 |                           |
+| Name            | Name                      | Name            |
+| --------------- | ------------------------- | --------------- |
+| `android`       | `animation`               | `arrow_back`    |
+| `bookmark_add`  | `call`                    | `category`      |
+| `chat`          | `check`                   | `chevron_left`  |
+| `chevron_right` | `close`                   | `dark_mode`     |
+| `delete`        | `download`                | `error`         |
+| `expand_more`   | `explore`                 | `file_download` |
+| `flag`          | `flash_on`                | `fullscreen`    |
+| `grid_view`     | `home`                    | `info`          |
+| `ios_share`     | `language`                | `live_tv`       |
+| `lock`          | `mail`                    | `more_vert`     |
+| `movie`         | `nightlight_round`        | `open_in_new`   |
+| `pause`         | `person`                  | `play_arrow`    |
+| `refresh`       | `rocket_launch`           | `schedule`      |
+| `search`        | `sentiment_satisfied_alt` | `settings`      |
+| `share`         | `signal_cellular_alt`     | `star`          |
+| `support_agent` | `theater_comedy`          | `tv`            |
+| `volume_up`     | `wifi`                    | `wifi_off`      |
 
 ### Adding an icon
 

@@ -21,12 +21,12 @@ export function ErrorState({
   return (
     <div className="flex h-full flex-col items-center justify-center px-[32px] py-[32px] text-center">
       <Icon name={icon} className="text-[64px] text-accent" />
-      <h2 className="mt-[16px] text-[22px] font-bold leading-[28px]">{title}</h2>
-      <p className="mt-[8px] text-[14px] leading-[20px] text-text-muted">{message}</p>
+      <h2 className="t-headline-md mt-[16px]">{title}</h2>
+      <p className="t-body-md mt-[8px]">{message}</p>
       <button
         type="button"
         onClick={onRetry}
-        className="mt-[24px] rounded-[8px] bg-accent px-[24px] py-[10px] text-[14px] font-semibold leading-[20px] text-white"
+        className="t-label-lg mt-[24px] rounded-[8px] bg-accent px-[24px] py-[10px] text-white"
       >
         {actionLabel}
       </button>

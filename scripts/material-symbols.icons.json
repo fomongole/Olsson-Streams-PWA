@@ -49,6 +49,8 @@
     "animation",
     "nightlight_round",
     "rocket_launch",
-    "explore"
+    "explore",
+    "arrow_back",
+    "file_download"
   ]
 }

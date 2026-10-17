@@ -2,15 +2,16 @@ import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ErrorState } from '@/components/ui/ErrorState'
 import { Icon } from '@/components/ui/Icon'
+import { sectionCategoryPath } from '@/app/routes'
 import { useOnlineStatus } from '@/features/connection/useOnlineStatus'
 import { CategorySection } from '@/features/home/CategorySection'
 import { HeroBanner } from '@/features/home/HeroBanner'
 import { HomeSkeleton, ShelfSkeleton } from '@/features/home/HomeSkeleton'
 import { HomeTopFloatingBar } from '@/features/home/HomeTopFloatingBar'
-import type { CategoryNavState, DetailsNavState } from '@/features/home/navState'
 import { useHomeFeed } from '@/features/home/useHomeFeed'
+import { useOpenMovie } from '@/features/details/useOpenMovie'
 import { ApiError } from '@/shared/api/errors'
-import type { HomeMovie, HomeSection } from '@/shared/api/endpoints'
+import type { HomeSection } from '@/shared/api/endpoints'
 import { showToast } from '@/shared/ui/toast'
 
 const OFFLINE_TOAST = "It looks like you're offline 👀."
@@ -27,6 +28,7 @@ function homeErrorMessage(error: unknown): string {
 
 export function HomeScreen() {
   const navigate = useNavigate()
+  const openMovie = useOpenMovie()
   const { data, error, isLoading, refetch } = useHomeFeed()
   const isOnline = useOnlineStatus()
 
@@ -52,14 +54,8 @@ export function HomeScreen() {
     }
   }, [isOnline, hasContent])
 
-  function openDetails(movie: HomeMovie) {
-    void navigate('/details', { state: { movie } satisfies DetailsNavState })
-  }
-
   function openCategory(section: HomeSection) {
-    void navigate(`/category/${section.id}`, {
-      state: { section } satisfies CategoryNavState,
-    })
+    void navigate(sectionCategoryPath(section))
   }
 
   return (
@@ -78,11 +74,7 @@ export function HomeScreen() {
           {/* Occupies the hero slot until hero data arrives so the shelves
               below cannot jump to the top and look already scrolled. */}
           {hero.length > 0 ? (
-            <HeroBanner
-              items={hero}
-              onMovieClick={openDetails}
-              onWatchNow={openDetails}
-            />
+            <HeroBanner items={hero} onMovieClick={openMovie} onWatchNow={openMovie} />
           ) : (
             <div className="h-[430px] w-full shimmer" />
           )}
@@ -94,7 +86,7 @@ export function HomeScreen() {
               className="flex w-full items-center rounded-[12px] border-[0.8px] border-border bg-surface-variant px-[16px] py-[13px] text-left"
             >
               <Icon name="search" className="text-[20px] text-text-subtle" />
-              <span className="ml-[12px] text-[14px] leading-[20px] text-text-subtle">
+              <span className="t-body-md ml-[12px] text-text-subtle">
                 Search movies, genres, VJs...
               </span>
             </button>
@@ -109,7 +101,7 @@ export function HomeScreen() {
                 <div key={section.id}>
                   <CategorySection
                     section={section}
-                    onMovieClick={openDetails}
+                    onMovieClick={openMovie}
                     onViewAllClick={openCategory}
                   />
                   <div className="h-[16px]" />

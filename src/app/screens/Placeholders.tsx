@@ -1,7 +1,6 @@
 /** Placeholder screens for the routes that arrive with later phases. */
 
-import { useLocation, useParams } from 'react-router-dom'
-import type { CategoryNavState, DetailsNavState } from '@/features/home/navState'
+import { useParams } from 'react-router-dom'
 
 function Placeholder({ title, hint }: { title: string; hint: string }) {
   return (
@@ -30,18 +29,13 @@ export function SearchScreen() {
   return <Placeholder title="Search" hint="Unified search arrives in Phase 8." />
 }
 
-export function DetailsScreen() {
-  const state = useLocation().state as DetailsNavState | null
-  const title = state?.movie.title ?? 'Details'
-  return <Placeholder title={title} hint="Movie details arrive in Phase 5." />
-}
-
 export function CategoryScreen() {
-  const state = useLocation().state as CategoryNavState | null
-  const { sectionId } = useParams()
-  const title = state?.section.title ?? sectionId ?? 'Category'
+  const { title } = useParams()
   return (
-    <Placeholder title={title} hint="The full category listing arrives in Phase 8." />
+    <Placeholder
+      title={title ?? 'Category'}
+      hint="The full category listing arrives in Phase 8."
+    />
   )
 }
 

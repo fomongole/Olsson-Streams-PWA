@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@/components/ui/Icon'
-import type { HomeMovie } from '@/shared/api/endpoints'
+import type { Movie } from '@/shared/api/endpoints'
 import { usePresentation } from '@/features/capabilities/presentation-hooks'
 import { usePrefersReducedMotion } from '@/shared/hooks/usePrefersReducedMotion'
 import { heroMetaText, primaryGenre, stableMovieKey } from './movieMeta'
@@ -26,11 +26,13 @@ export function HeroBanner({
   onMovieClick,
   onWatchNow,
 }: {
-  items: HomeMovie[]
-  onMovieClick: (movie: HomeMovie) => void
-  onWatchNow: (movie: HomeMovie) => void
+  items: Movie[]
+  onMovieClick: (movie: Movie) => void
+  onWatchNow: (movie: Movie) => void
 }) {
-  const { heroImageMode, supportsMovieGenres, supportsVjs } = usePresentation()
+  // Android stores `supportsVjs` / `supportsMovieGenres` but never reads them —
+  // the hero gates only on `vj.isNotBlank()` / `genres.isNotBlank()`. Match that.
+  const { heroImageMode } = usePresentation()
   const posterMode = heroImageMode === 'poster'
   const reducedMotion = usePrefersReducedMotion()
 
@@ -82,8 +84,6 @@ export function HeroBanner({
             key={stableMovieKey(movie, itemIndex)}
             movie={movie}
             posterMode={posterMode}
-            supportsMovieGenres={supportsMovieGenres}
-            supportsVjs={supportsVjs}
             onMovieClick={onMovieClick}
             onWatchNow={onWatchNow}
           />
@@ -118,20 +118,16 @@ export function HeroBanner({
 function HeroSlide({
   movie,
   posterMode,
-  supportsMovieGenres,
-  supportsVjs,
   onMovieClick,
   onWatchNow,
 }: {
-  movie: HomeMovie
+  movie: Movie
   posterMode: boolean
-  supportsMovieGenres: boolean
-  supportsVjs: boolean
-  onMovieClick: (movie: HomeMovie) => void
-  onWatchNow: (movie: HomeMovie) => void
+  onMovieClick: (movie: Movie) => void
+  onWatchNow: (movie: Movie) => void
 }) {
   const vj = movie.vj.trim()
-  const genre = supportsMovieGenres ? primaryGenre(movie.genres) : ''
+  const genre = primaryGenre(movie.genres)
   const image = posterMode ? movie.poster_url : movie.backdrop_url || movie.poster_url
 
   return (
@@ -162,16 +158,16 @@ function HeroSlide({
             alt=""
             className="h-[210px] w-[140px] rounded-[8px] object-cover"
           />
+          {/* headlineSmall is the one slot Type.kt leaves to Material3
+              (24/32, Medium), pushed to ExtraBold here. */}
           <h2 className="mt-[16px] line-clamp-2 text-[24px] font-extrabold leading-[32px]">
             {movie.title}
           </h2>
-          {vj !== '' && supportsVjs && (
-            <p className="mt-[10px] text-[12px] font-semibold leading-[16px] text-white/[0.78]">
-              {vj.toUpperCase()}
-            </p>
+          {vj !== '' && (
+            <p className="t-label-md mt-[10px] text-white/[0.78]">{vj.toUpperCase()}</p>
           )}
           {heroMetaText(movie) !== '' && (
-            <p className="mt-[8px] line-clamp-2 text-[12px] leading-[16px] text-text-muted">
+            <p className="t-body-sm mt-[8px] line-clamp-2 text-text-muted">
               {heroMetaText(movie)}
             </p>
           )}
@@ -179,33 +175,29 @@ function HeroSlide({
       ) : (
         <div className="relative z-20 flex h-full flex-col justify-end px-[20px] pb-[24px] pt-[24px]">
           <div className="flex items-center gap-[8px]">
-            {vj !== '' && supportsVjs && (
-              <span className="rounded-[4px] bg-accent px-[7px] py-[3px] text-[11px] font-bold leading-[16px] text-white">
+            {vj !== '' && (
+              <span className="t-label-sm rounded-[4px] bg-accent px-[7px] py-[3px] font-bold text-white">
                 {vj}
               </span>
             )}
             {genre !== '' && (
-              <span className="rounded-[4px] bg-surface-variant px-[7px] py-[3px] text-[11px] leading-[16px] text-gold">
+              <span className="t-label-sm rounded-[4px] bg-surface-variant px-[7px] py-[3px] text-gold">
                 {genre.toUpperCase()}
               </span>
             )}
           </div>
 
-          <h2 className="mt-[8px] line-clamp-2 text-[45px] font-bold leading-[52px]">
-            {movie.title}
-          </h2>
+          <h2 className="t-display-md mt-[8px] line-clamp-2">{movie.title}</h2>
 
           {movie.overview.trim() !== '' && (
-            <p className="mt-[6px] line-clamp-2 text-[14px] leading-[20px] text-text-muted">
-              {movie.overview}
-            </p>
+            <p className="t-body-md mt-[6px] line-clamp-2">{movie.overview}</p>
           )}
 
           <div className="mt-[16px] flex gap-[12px]">
             <button
               type="button"
               onClick={() => onWatchNow(movie)}
-              className="flex h-[44px] items-center rounded-[8px] bg-accent pl-[16px] pr-[16px] text-[14px] font-semibold leading-[20px] text-white"
+              className="t-label-lg flex h-[44px] items-center rounded-[8px] bg-accent px-[16px] text-white"
             >
               <Icon name="play_arrow" className="mr-[6px] text-[20px] text-white" />
               Watch Now
@@ -213,7 +205,7 @@ function HeroSlide({
             <button
               type="button"
               onClick={() => onMovieClick(movie)}
-              className="flex h-[44px] items-center rounded-[8px] border border-white/40 bg-transparent pl-[16px] pr-[16px] text-[14px] font-semibold leading-[20px] text-white"
+              className="t-label-lg flex h-[44px] items-center rounded-[8px] border border-white/40 bg-transparent px-[16px] text-white"
             >
               <Icon name="info" className="mr-[6px] text-[18px] text-white" />
               Details

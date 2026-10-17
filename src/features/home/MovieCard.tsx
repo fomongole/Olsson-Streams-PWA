@@ -1,5 +1,5 @@
 import { Icon } from '@/components/ui/Icon'
-import type { HomeMovie } from '@/shared/api/endpoints'
+import type { Movie } from '@/shared/api/endpoints'
 import { cardMetaText } from './movieMeta'
 
 /**
@@ -12,8 +12,8 @@ export function MovieCard({
   movie,
   onClick,
 }: {
-  movie: HomeMovie
-  onClick: (movie: HomeMovie) => void
+  movie: Movie
+  onClick: (movie: Movie) => void
 }) {
   const meta = cardMetaText(movie)
   const vj = movie.vj.trim()
@@ -33,7 +33,7 @@ export function MovieCard({
         />
 
         {vj !== '' && (
-          <span className="absolute left-0 top-0 rounded-br-[8px] bg-accent px-[6px] py-[2.5px] text-[8.5px] font-bold leading-[16px] text-white">
+          <span className="absolute left-0 top-0 rounded-br-[8px] bg-accent px-[6px] py-[2.5px] text-[8.5px] font-bold text-white">
             {vj}
           </span>
         )}
@@ -41,16 +41,14 @@ export function MovieCard({
         {movie.rating > 0 && (
           <span className="absolute bottom-0 right-0 flex items-center rounded-tl-[8px] bg-[rgba(14,22,33,0.9)] px-[8px] py-[3.5px]">
             <Icon name="star" filled className="mr-[3px] text-[10.5px] text-gold" />
-            <span className="text-[9px] font-bold leading-[16px] text-white">
+            <span className="text-[9px] font-bold text-white">
               {movie.rating.toFixed(1)}
             </span>
           </span>
         )}
       </div>
 
-      <p className="mt-[6px] truncate text-[12px] font-semibold leading-[16px] tracking-[0.5px]">
-        {movie.title}
-      </p>
+      <p className="t-label-md mt-[6px] truncate">{movie.title}</p>
       {meta !== '' && (
         <p className="truncate text-[10.5px] leading-[16px] text-text-muted">{meta}</p>
       )}
