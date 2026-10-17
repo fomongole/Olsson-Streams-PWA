@@ -51,6 +51,13 @@
     "rocket_launch",
     "explore",
     "arrow_back",
-    "file_download"
+    "file_download",
+    "replay_10",
+    "forward_10",
+    "fullscreen_exit",
+    "screen_rotation_alt",
+    "fit_screen",
+    "zoom_out_map",
+    "crop_free"
   ]
 }

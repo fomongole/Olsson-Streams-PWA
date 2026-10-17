@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Icon } from '@/components/ui/Icon'
 import { ErrorState } from '@/components/ui/ErrorState'
-import { genreCategoryPath, vjCategoryPath } from '@/app/routes'
+import { genreCategoryPath, playPath, vjCategoryPath } from '@/app/routes'
 import { downloadsEnabled } from '@/features/config/AppConfigProvider'
 import { usePresentation } from '@/features/capabilities/presentation-hooks'
 import { useOnlineStatus } from '@/features/connection/useOnlineStatus'
@@ -10,37 +10,14 @@ import { CategorySection } from '@/features/home/CategorySection'
 import { ShelfSkeleton } from '@/features/home/HomeSkeleton'
 import { useOpenMovie } from '@/features/details/useOpenMovie'
 import { useMovieDetails, useRelatedMovies } from '@/features/details/useMovieDetails'
+import { detailsErrorMessage, isNotFound } from '@/features/details/detailsErrors'
 import { DetailsBackdrop } from '@/features/details/DetailsBackdrop'
 import { DetailsHeader } from '@/features/details/DetailsHeader'
 import { DetailsSkeleton } from '@/features/details/DetailsSkeleton'
 import { DetailsTopBar } from '@/features/details/DetailsTopBar'
-import { ApiError } from '@/shared/api/errors'
 import { useGoBack } from '@/shared/navigation/useGoBack'
 import type { HomeSection } from '@/shared/api/endpoints'
 import { showToast } from '@/shared/ui/toast'
-
-/** Android's `ErrorUtils.sanitize(message, fallback)` for the details load. */
-function detailsErrorMessage(error: unknown): string {
-  if (error instanceof ApiError) {
-    if (error.hasServerMessage && error.message) return error.message
-    if (error.isNetworkError) {
-      return 'Unable to reach the server. Check your connection and try again.'
-    }
-  }
-  return "Couldn't load this title right now. Please try again."
-}
-
-/**
- * Android decides `notFoundOnServer` by looking for "not found" in the message.
- * This API's 404 copy reads "could not be found", so the status is checked too —
- * same screen, reached on the copy the Laravel API actually returns.
- */
-function isNotFound(error: unknown): boolean {
-  return (
-    error instanceof ApiError &&
-    (error.status === 404 || /not found/i.test(error.message))
-  )
-}
 
 export function DetailsScreen() {
   const { movieId = '' } = useParams()
@@ -182,7 +159,15 @@ export function DetailsScreen() {
             <button
               type="button"
               disabled={!hasStream}
-              onClick={() => showToast('Streaming arrives in Phase 6.')}
+              onClick={() =>
+                void navigate(
+                  playPath({
+                    id: details.id,
+                    title: details.title,
+                    source_ref: details.source_ref,
+                  }),
+                )
+              }
               className="flex h-[50px] w-full items-center justify-center rounded-[12px] bg-accent text-white disabled:bg-accent/35 disabled:text-white/70"
             >
               <span className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-white/[0.22]">

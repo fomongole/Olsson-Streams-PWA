@@ -44,3 +44,27 @@ transparent only over the Home hero (`pathname === '/'` and not scrolled).
 Screens inside `AppShell` that do **not** start with full-bleed art must
 clear it with `lg:pt-[72px]` on their root. `HomeScreen` deliberately omits
 it so the hero runs under the transparent nav.
+
+## The player screen (Phase 6)
+
+`src/features/player/` renders at `/play/:movieId` **outside `AppShell`** (like
+the details screen), so neither the desktop header nor the mobile dock sits
+over the video. Anything Phase 7 reuses should follow these rules:
+
+- **Navigation** comes from `playPath(movie)` in `src/app/routes.ts`. The route
+  takes `title` and `sourceRef` in the query string as display fallbacks; the
+  canonical details still come from `useMovieDetails(movieId, sourceRef)`.
+- **Modes** are Android's: `compact` (video box over a details column),
+  `full` (`fixed inset-0 z-50`) and `landscape` (same, plus the Fullscreen API
+  where the browser allows it). Back is mode-aware — it drops a mode before
+  it pops the route, exactly like `handlePlayerBack`.
+- **Stream choice** is the first non-blank `servers[].url`, and HLS (`.m3u8`)
+  is loaded through a dynamic `import('hls.js')` so the 574 KB chunk only
+  downloads when a title actually plays. Keep it lazy.
+- **Controls** live in `PlayerControlsOverlay`: the tap layer is a _sibling_ of
+  the controls, the controls wrapper is always `pointer-events-none`, and each
+  real control opts back in with `pointer-events-auto`. Do not regress that —
+  a wrapper that hit-tests would swallow every tap on empty space.
+- **Progress** is stored per key from `progressKeyFor(details)`; see
+  `playbackProgress.ts` for the resume/clear rules. `useUpNext` also excludes
+  by provider id because Beera sets every `tmdb_id = 0`.

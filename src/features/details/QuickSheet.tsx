@@ -1,9 +1,12 @@
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { playPath } from '@/app/routes'
 import { Icon } from '@/components/ui/Icon'
 import { downloadsEnabled } from '@/features/config/AppConfigProvider'
 import { releaseYear } from '@/features/home/movieMeta'
 import { showToast } from '@/shared/ui/toast'
 import type { Movie } from '@/shared/api/endpoints'
+import { closeQuickSheet } from './quickSheetStore'
 
 /** Android's join separator; kept verbatim and rendered with `whitespace-pre-wrap`. */
 const SHEET_META_SEP = '  ·  '
@@ -38,6 +41,7 @@ function sheetMetadata(movie: Movie): string {
  * a bottom sheet on a 1440px screen looks like an accident.
  */
 export function QuickSheet({ movie, onClose }: { movie: Movie; onClose: () => void }) {
+  const navigate = useNavigate()
   const vj = movie.vj.trim()
   const metadata = sheetMetadata(movie)
 
@@ -110,7 +114,16 @@ export function QuickSheet({ movie, onClose }: { movie: Movie; onClose: () => vo
               <div className="mt-[20px]">
                 <button
                   type="button"
-                  onClick={() => showToast('Streaming arrives in Phase 6.')}
+                  onClick={() => {
+                    closeQuickSheet()
+                    void navigate(
+                      playPath({
+                        id: movie.id,
+                        title: movie.title,
+                        source_ref: movie.source_ref,
+                      }),
+                    )
+                  }}
                   className="flex h-[50px] w-full items-center justify-center rounded-[8px] bg-accent text-white active:bg-accent-pressed"
                 >
                   <span className="flex h-[28px] w-[28px] items-center justify-center rounded-full bg-white/20">

@@ -12,7 +12,7 @@ import { ApiError } from '@/shared/api/errors'
  * so retrying it only delays the "not found" state Android shows. Transient
  * network and 5xx failures still get two more attempts.
  */
-function retryUnlessMissing(failureCount: number, error: unknown): boolean {
+export function retryUnlessMissing(failureCount: number, error: unknown): boolean {
   if (error instanceof ApiError && error.status >= 400 && error.status < 500) return false
   return failureCount < 2
 }

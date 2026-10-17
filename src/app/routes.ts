@@ -12,16 +12,32 @@ import type { HomeSection } from '@/shared/api/endpoints'
  * never do), and a non-blank `sourceRef` pins the fetch to the record the
  * tapped item came from, exactly like Android's `pinnedSource`.
  */
-export function detailsPath(movie: {
+export function detailsPath(movie: MovieIdentity): string {
+  return titlePath('/details', movie)
+}
+
+/**
+ * `play/{id}?title=…&sourceRef=…` — same identity as the details route,
+ * because the player resolves its own stream: Android hands the ViewModel the
+ * `RESOLVE_STREAM` sentinel instead of a URL and lets it fetch details for the
+ * server list, so the URL only has to name the title.
+ */
+export function playPath(movie: MovieIdentity): string {
+  return titlePath('/play', movie)
+}
+
+interface MovieIdentity {
   id: string | number
   title: string
   source_ref?: string
-}): string {
+}
+
+function titlePath(base: string, movie: MovieIdentity): string {
   const params = new URLSearchParams()
   if (movie.title !== '') params.set('title', movie.title)
   if (movie.source_ref) params.set('sourceRef', movie.source_ref)
   const query = params.toString()
-  return `/details/${encodeURIComponent(String(movie.id))}${query ? `?${query}` : ''}`
+  return `${base}/${encodeURIComponent(String(movie.id))}${query ? `?${query}` : ''}`
 }
 
 /** Android: `category/{title}/{genre}/{filterKey}`, each segment URI-encoded. */

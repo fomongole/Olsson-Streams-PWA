@@ -122,6 +122,41 @@ def load_icon_names() -> list[str]:
     return [str(n) for n in names]
 
 
+# Ligature components are glyph names, not characters. Letters are named after
+# themselves, but these are not -- map them back to the text a user types.
+_DIGIT_GLYPHS = {
+    "digit_zero": "0",
+    "digit_one": "1",
+    "digit_two": "2",
+    "digit_three": "3",
+    "digit_four": "4",
+    "digit_five": "5",
+    "digit_six": "6",
+    "digit_seven": "7",
+    "digit_eight": "8",
+    "digit_nine": "9",
+}
+
+
+def component_text(components) -> str:
+    """Rebuild the typed name a rule spells, e.g. ("r","e","p","l","a","y",
+    "underscore","digit_one","digit_zero") -> "replay_10".
+
+    Without the digit map every icon whose name carries a numeral ("replay_10",
+    "forward_10") reconstructs as "replay_digit_one_digit_zero" and is reported
+    as missing, even though the rule is right there in the font.
+    """
+    out = []
+    for component in components:
+        if component == "space":
+            out.append(" ")
+        elif component == "underscore":
+            out.append("_")
+        else:
+            out.append(_DIGIT_GLYPHS.get(component, component))
+    return "".join(out)
+
+
 def required_component_glyphs(source: Path) -> set[str]:
     """Collect every glyph the icons' ligature rules need to survive subsetting.
 
@@ -133,7 +168,9 @@ def required_component_glyphs(source: Path) -> set[str]:
       * the OUTPUT glyph (Ligature.LigGlyph) -- this is the actual icon
 
     Component names are glyph names, not characters: the word separator in
-    "wifi_off" is the "_" character, but its glyph is named "underscore".
+    "wifi_off" is the "_" character, but its glyph is named "underscore", and
+    the numerals in "replay_10" are "digit_one"/"digit_zero". See
+    component_text() for the full translation.
     """
     from fontTools.ttLib import TTFont
 
@@ -162,10 +199,7 @@ def required_component_glyphs(source: Path) -> set[str]:
                 for first_glyph, entries in ligatures.items():
                     for entry in entries:
                         components = (first_glyph, *entry.Component)
-                        name = "".join(
-                            " " if c == "space" else "_" if c == "underscore" else c
-                            for c in components
-                        )
+                        name = component_text(components)
                         if name in wanted:
                             needed.update(components)
                             needed.add(entry.LigGlyph)
@@ -228,12 +262,8 @@ def verify_subset(needed: set[str]) -> None:
                 )
                 for first_glyph, entries in (getattr(real, "ligatures", None) or {}).items():
                     for entry in entries:
-                        components = (first_glyph, *entry.Component)
                         present.add(
-                            "".join(
-                                " " if c == "space" else "_" if c == "underscore" else c
-                                for c in components
-                            )
+                            component_text((first_glyph, *entry.Component))
                         )
     tt.close()
 
@@ -279,6 +309,11 @@ def main() -> None:
         "--glyphs=" + ",".join(all_glyphs),
         "--layout-features=*",
         "--no-layout-closure",
+        # Keep the original glyph names. Without this pyftsubset regenerates
+        # them from cmap, so "digit_one" comes back as "one" and the verify
+        # step can no longer reconstruct the ligature a name like "replay_10"
+        # spells.
+        "--glyph-names",
         "--flavor=woff2",
         f"--output-file={OUT_FONT}",
     ]

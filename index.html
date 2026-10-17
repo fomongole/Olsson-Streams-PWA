@@ -13,6 +13,11 @@
     <meta name="theme-color" content="#0E1621" />
     <meta name="color-scheme" content="dark" />
 
+    <!-- Never attach our origin to a media request: the stream CDN and
+         hls.js' XHR both take their referrer policy from the document
+         (`referrerpolicy` does not exist on <video> or XMLHttpRequest). -->
+    <meta name="referrer" content="no-referrer" />
+
     <!-- iOS standalone PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />

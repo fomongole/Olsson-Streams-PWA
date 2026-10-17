@@ -6,3 +6,4 @@ dev-dist
 .font-cache
 .venv-icons
 *.tsbuildinfo
+__pycache__/

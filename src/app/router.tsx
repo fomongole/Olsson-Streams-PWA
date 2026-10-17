@@ -5,6 +5,7 @@ import { loadSession, onSessionChanged, onUnauthorized } from '@/shared/api/sess
 import { AppShell } from './app-shell/AppShell'
 import { DetailsScreen } from './screens/DetailsScreen'
 import { HomeScreen } from './screens/HomeScreen'
+import { PlayerScreen } from '@/features/player/PlayerScreen'
 import {
   CategoryScreen,
   GenresScreen,
@@ -47,6 +48,9 @@ export function AppRouter() {
             backdrop. The title and any source pin live in the query string so
             a refresh or a shared link resolves the same record (routes.ts). */}
         <Route path="/details/:movieId" element={<DetailsScreen />} />
+        {/* Full-bleed for the same reason: the video box and its controls own
+            the viewport, with no header or dock layered over them. */}
+        <Route path="/play/:movieId" element={<PlayerScreen />} />
         <Route element={<AppShell />}>
           <Route index element={<HomeScreen />} />
           <Route path="series" element={<SeriesScreen />} />
