@@ -1,6 +1,5 @@
 /**
- * Boot + auth endpoints: the public app config, the access-code verify and
- * the auth device check. More endpoints arrive with their phases.
+ * Boot + auth + content endpoints. More arrive with their phases.
  */
 
 import { apiGet, apiRequest } from './client'
@@ -123,4 +122,71 @@ export function verifyAccessCodeRequest(code: string, deviceId: string) {
     body: { code, device_id: deviceId },
     public: true,
   })
+}
+
+/* ---- GET /home ---- */
+
+/** Every movie item the home feed returns: MovieDto::toArray() plus decorate(). */
+export interface HomeMovie {
+  id: string | number
+  tmdb_id: number
+  canonical_tmdb_id: number | null
+  title: string
+  overview: string
+  poster_url: string
+  backdrop_url: string
+  rating: number
+  /** Comma-joined list, e.g. "Action,Thriller". */
+  genres: string
+  release_date: string
+  duration: number
+  language: string
+  vj: string
+  logo_url: string
+  origin_country: string
+  status: string
+  /** Present only when the item belongs to a series. */
+  series_id?: string | number | null
+  series_title?: string | null
+  season_number?: number | null
+  episode_number?: number | null
+  source_ref?: string
+  source_cache_key?: string
+  source_movie_open_mode?: string
+}
+
+export interface HomeSection {
+  id: string
+  title: string
+  /** Android icon name — mapped to a ligature by @/features/home/sectionIcon.ts. */
+  icon: string
+  type: string
+  genre?: string
+  items: HomeMovie[]
+}
+
+export interface HomeFeed {
+  hero: HomeMovie[]
+  latest: HomeMovie[]
+  /** Non-empty rails only; the client renders exactly this list. */
+  sections: HomeSection[]
+  /**
+   * Always present for client compatibility: adventure/vj_junior/vj_emmy/vj_ulio
+   * are always empty, the rest duplicate their `sections` entry. Nothing reads
+   * them — `sections` is the source of truth for the shelves.
+   */
+  action: HomeMovie[]
+  adventure: HomeMovie[]
+  vj_junior: HomeMovie[]
+  comedy: HomeMovie[]
+  drama: HomeMovie[]
+  vj_emmy: HomeMovie[]
+  animation: HomeMovie[]
+  horror: HomeMovie[]
+  vj_ulio: HomeMovie[]
+  scifi: HomeMovie[]
+}
+
+export function fetchHome(): Promise<HomeFeed> {
+  return apiGet<HomeFeed>('home')
 }

@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { downloadsEnabled } from '@/features/config/AppConfigProvider'
 import { InstallBanners } from '@/features/install-banner/InstallBanners'
 import { Icon, type IconName } from '@/components/ui/Icon'
@@ -28,6 +28,8 @@ function tabClass(isActive: boolean): string {
 }
 
 export function AppShell() {
+  const navigate = useNavigate()
+
   return (
     <div className="flex min-h-dvh flex-col bg-bg">
       <InstallBanners />
@@ -76,6 +78,17 @@ export function AppShell() {
               </NavLink>
             ))}
           </nav>
+
+          {/* Mobile reaches Profile through the Home floating pill; the
+              desktop header is the only place it exists here. */}
+          <button
+            type="button"
+            aria-label="Profile"
+            onClick={() => navigate('/profile')}
+            className="ml-auto flex h-11 w-11 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface hover:text-text"
+          >
+            <Icon name="person" className="text-[24px]" />
+          </button>
         </div>
       </header>
     </div>

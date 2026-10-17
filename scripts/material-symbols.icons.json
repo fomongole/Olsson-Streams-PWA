@@ -1,5 +1,5 @@
 {
-  "comment": "Icon ligature names to include in the subsetted Material Symbols Rounded font. Add a name here, run `npm run icons`, and commit the regenerated font. Names are Google Material Symbols ligatures; a few legacy names (error_outline, mail_outline, phone) do not exist in the current font and must use their modern equivalents (error, mail, call).",
+  "comment": "Icon ligature names to include in the subsetted Material Symbols Rounded font. Add a name here, run `npm run icons`, and commit the regenerated font. Names are Google Material Symbols ligatures; a few legacy names (error_outline, mail_outline, phone) do not exist in the current font and must use their modern equivalents (error, mail, call). Some names are also trapdoors that look plausible but do not exist: `flash` is only flash_on/flash_off/flash_auto, so the Android FlashOn icon maps to flash_on.",
   "icons": [
     "home",
     "live_tv",
@@ -42,6 +42,13 @@
     "language",
     "dark_mode",
     "info",
-    "flag"
+    "flag",
+    "flash_on",
+    "sentiment_satisfied_alt",
+    "theater_comedy",
+    "animation",
+    "nightlight_round",
+    "rocket_launch",
+    "explore"
   ]
 }

@@ -189,3 +189,57 @@
     animation: none;
   }
 }
+
+/* ---- Shimmer skeleton ---- */
+
+/*
+ * Mirrors ShimmerLoading.kt: a 1200ms FastOutSlowIn sweep across a
+ * ShimmerBase -> ShimmerHighlight -> ShimmerBase gradient that restarts from
+ * the beginning each cycle (RepeatMode.Restart).
+ */
+@layer components {
+  .shimmer {
+    background-image: linear-gradient(
+      105deg,
+      var(--color-shimmer-a) 35%,
+      var(--color-shimmer-b) 50%,
+      var(--color-shimmer-a) 65%
+    );
+    background-size: 250% 100%;
+    animation: shimmer-sweep 1200ms cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    background-position: -50% 0;
+  }
+  100% {
+    background-position: 150% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    animation: none;
+    background-position: 0 0;
+  }
+}
+
+/* ---- Scroll containers ---- */
+
+/*
+ * Compose's LazyRow draws no visible scrollbar; the Home poster rails and the
+ * hero pager mirror that. The containers still scroll by touch, trackpad and
+ * keyboard — hiding the affordance is a visual choice, not an interaction one.
+ */
+@layer components {
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

@@ -1,4 +1,7 @@
-/** Placeholder screens for Phase 1 — real content arrives with later phases. */
+/** Placeholder screens for the routes that arrive with later phases. */
+
+import { useLocation, useParams } from 'react-router-dom'
+import type { CategoryNavState, DetailsNavState } from '@/features/home/navState'
 
 function Placeholder({ title, hint }: { title: string; hint: string }) {
   return (
@@ -7,15 +10,6 @@ function Placeholder({ title, hint }: { title: string; hint: string }) {
       <p className="mt-2 max-w-md text-sm text-text-muted">{hint}</p>
       <div className="mt-8 h-40 rounded-card bg-surface" />
     </div>
-  )
-}
-
-export function HomeScreen() {
-  return (
-    <Placeholder
-      title="Home"
-      hint="Featured content, continue watching and shelves arrive in Phase 4."
-    />
   )
 }
 
@@ -34,6 +28,30 @@ export function GenresScreen() {
 
 export function SearchScreen() {
   return <Placeholder title="Search" hint="Unified search arrives in Phase 8." />
+}
+
+export function DetailsScreen() {
+  const state = useLocation().state as DetailsNavState | null
+  const title = state?.movie.title ?? 'Details'
+  return <Placeholder title={title} hint="Movie details arrive in Phase 5." />
+}
+
+export function CategoryScreen() {
+  const state = useLocation().state as CategoryNavState | null
+  const { sectionId } = useParams()
+  const title = state?.section.title ?? sectionId ?? 'Category'
+  return (
+    <Placeholder title={title} hint="The full category listing arrives in Phase 8." />
+  )
+}
+
+export function ProfileScreen() {
+  return (
+    <Placeholder
+      title="Profile"
+      hint="Account, downloads and local lists arrive in Phase 9."
+    />
+  )
 }
 
 export function NotFoundScreen() {

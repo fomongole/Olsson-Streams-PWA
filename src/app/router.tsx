@@ -3,10 +3,13 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AccessScreen } from '@/features/auth/AccessScreen'
 import { loadSession, onSessionChanged, onUnauthorized } from '@/shared/api/session'
 import { AppShell } from './app-shell/AppShell'
+import { HomeScreen } from './screens/HomeScreen'
 import {
+  CategoryScreen,
+  DetailsScreen,
   GenresScreen,
-  HomeScreen,
   NotFoundScreen,
+  ProfileScreen,
   SearchScreen,
   SeriesScreen,
 } from './screens/Placeholders'
@@ -45,7 +48,10 @@ export function AppRouter() {
           <Route path="series" element={<SeriesScreen />} />
           <Route path="genres" element={<GenresScreen />} />
           <Route path="search" element={<SearchScreen />} />
-          {/* Detail/player routes arrive with Phases 5–6. */}
+          {/* Real in Phase 5 / 8 / 9; routed now so Home taps land somewhere. */}
+          <Route path="details" element={<DetailsScreen />} />
+          <Route path="category/:sectionId" element={<CategoryScreen />} />
+          <Route path="profile" element={<ProfileScreen />} />
           <Route path="access" element={<Navigate to="/" replace />} />
           <Route path="*" element={<NotFoundScreen />} />
         </Route>

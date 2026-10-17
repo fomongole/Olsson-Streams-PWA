@@ -18,7 +18,7 @@ npm run format     # Prettier
 
 All UI icons come from a **subsetted** copy of
 [Material Symbols Rounded](https://fonts.google.com/icons?icon.family=Material+Symbols+Rounded),
-shipped in `public/fonts/material-symbols-rounded.woff2` (~42 KB). The full font
+shipped in `public/fonts/material-symbols-rounded.woff2` (~55 KB). The full font
 is ~5.4 MB, which is far too heavy to ship to phones on mobile data, so we cut
 it down to only the glyphs this app uses.
 
@@ -47,22 +47,25 @@ compile error.
 
 ### Icons currently in the subset
 
-| Name            |     | Name          |     | Name                  |     |
-| --------------- | --- | ------------- | --- | --------------------- | --- |
-| `android`       |     | `flag`        |     | `person`              |     |
-| `bookmark_add`  |     | `fullscreen`  |     | `play_arrow`          |     |
-| `call`          |     | `grid_view`   |     | `refresh`             |     |
-| `category`      |     | `home`        |     | `schedule`            |     |
-| `chat`          |     | `info`        |     | `search`              |     |
-| `check`         |     | `ios_share`   |     | `settings`            |     |
-| `chevron_left`  |     | `language`    |     | `share`               |     |
-| `chevron_right` |     | `live_tv`     |     | `signal_cellular_alt` |     |
-| `close`         |     | `lock`        |     | `star`                |     |
-| `dark_mode`     |     | `mail`        |     | `support_agent`       |     |
-| `delete`        |     | `movie`       |     | `tv`                  |     |
-| `download`      |     | `more_vert`   |     | `volume_up`           |     |
-| `error`         |     | `open_in_new` |     | `wifi`                |     |
-| `expand_more`   |     | `pause`       |     | `wifi_off`            |     |
+| Name          | Name            | Name                      |
+| ------------- | --------------- | ------------------------- |
+| `android`     | `animation`     | `bookmark_add`            |
+| `call`        | `category`      | `chat`                    |
+| `check`       | `chevron_left`  | `chevron_right`           |
+| `close`       | `dark_mode`     | `delete`                  |
+| `download`    | `error`         | `expand_more`             |
+| `explore`     | `flag`          | `flash_on`                |
+| `fullscreen`  | `grid_view`     | `home`                    |
+| `info`        | `ios_share`     | `language`                |
+| `live_tv`     | `lock`          | `mail`                    |
+| `more_vert`   | `movie`         | `nightlight_round`        |
+| `open_in_new` | `pause`         | `person`                  |
+| `play_arrow`  | `refresh`       | `rocket_launch`           |
+| `schedule`    | `search`        | `sentiment_satisfied_alt` |
+| `settings`    | `share`         | `signal_cellular_alt`     |
+| `star`        | `support_agent` | `theater_comedy`          |
+| `tv`          | `volume_up`     | `wifi`                    |
+| `wifi_off`    |                 |                           |
 
 ### Adding an icon
 
@@ -76,7 +79,9 @@ compile error.
 
 A few legacy names from the old Android app no longer exist in the current font
 and must use their modern equivalents: `error_outline` → `error`,
-`mail_outline` → `mail`, `phone` → `call`.
+`mail_outline` → `mail`, `phone` → `call`. Watch for names that look valid but
+aren't: the Android `FlashOn` icon has no `flash` ligature — only `flash_on`,
+`flash_off` and `flash_auto` exist.
 
 The build script refuses to finish if a name in the JSON has no matching
 ligature in the font, so a typo fails loudly rather than shipping a blank icon.
@@ -125,6 +130,6 @@ committed.
 
 ### Fonts loaded at runtime
 
-- `public/fonts/material-symbols-rounded.woff2` — the icon subset (~42 KB),
+- `public/fonts/material-symbols-rounded.woff2` — the icon subset (~55 KB),
   variable font (FILL/wght/GRAD/opsz axes).
 - `public/fonts/sora-{400,600,700}.ttf` — the Sora text faces.
